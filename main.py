@@ -1,13 +1,23 @@
-def main(data, context):
-    """Background Cloud Function to be triggered by Cloud Storage.
-       This generic function logs relevant data when a file is changed.
+import functions_framework
 
-    Args:
-        data (dict): The Cloud Functions event payload.
-        context (google.cloud.functions.Context): Metadata of triggering event.
-    Returns:
-        None; the output is written to Stackdriver Logging
-    """
-    event_id = context.event_id
-    event_type = context.event_type
-    bucket = data['bucket']
+# Triggered by a change in a storage bucket
+@functions_framework.cloud_event
+def main(cloud_event):
+    data = cloud_event.data
+
+    event_id = cloud_event["id"]
+    event_type = cloud_event["type"]
+
+    bucket = data["bucket"]
+    name = data["name"]
+    metageneration = data["metageneration"]
+    timeCreated = data["timeCreated"]
+    updated = data["updated"]
+
+    print(f"Event ID: {event_id}")
+    print(f"Event type: {event_type}")
+    print(f"Bucket: {bucket}")
+    print(f"File: {name}")
+    print(f"Metageneration: {metageneration}")
+    print(f"Created: {timeCreated}")
+    print(f"Updated: {updated}")
